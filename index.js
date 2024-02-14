@@ -20,7 +20,7 @@ async function start() {
   );
   //low and high variables
   let lowNum = 1;
-  let highNum = 100;
+  let highNum = 99;
   //computer guess equation
   let guess = Math.round((highNum + lowNum) / 2);
   //timeout to guess number
