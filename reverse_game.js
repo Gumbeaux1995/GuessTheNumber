@@ -11,10 +11,10 @@ start();
 
 async function start() {
   console.log(
-    "Let's play a game where you I make up a number and you try to guess it."
+    "Let's play a game where you I make up a number between 1-100 (inclusive) and you try to guess it."
   );
   //computer decides random number
-  let secretNumber = Math.floor(Math.random() * 100);
+  let secretNumber = Math.floor(Math.random() * 100) + 1;
   //user guesses number
   let guess = await ask("Guess a number! ");
   //computer shows user guess
