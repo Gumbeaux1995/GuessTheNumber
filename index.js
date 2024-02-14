@@ -26,33 +26,38 @@ async function start() {
   //timeout to guess number
   await timeout(5000);
   //Computer guess dialogue with user input
-  let response = await ask("Is it... " + guess + "? (Y OR N) ");
-  let answer = "Y";
-  //correct reponse dialogue when user response = Y
-  if (response === answer) {
+  let response = await ask("Is it... " + guess + "? (y OR n) ");
+  let answer = "y";
+  //correct reponse dialogue when user response = y
+  if (response.toLowerCase() === answer) {
     console.log("You Number was " + guess + "!");
     process.exit();
   }
   //higher or lower user input
-  let range = await ask("Is it higher (H), or lower (L)? ");
+  let range = await ask("Is it higher (h), or lower (l)? ");
   //while loop
-  //while user input does not = Y
-  while (response !== answer) {
-    //If use user input does not = H
-    if (range !== "H") {
+  //while user input does not = y
+  while (response.toLowerCase() !== answer) {
+    //If use user input does not = h
+    if (range.toLowerCase() !== "h") {
       highNum = guess - 1;
       guess = Math.round((highNum + lowNum) / 2);
-      response = await ask("Is it... " + guess + "? (Y OR N) ");
-      range = await ask("Is it higher (H), or lower (L)? ");
-      //if user input = H
-    } else {
+      response = await ask("Is it... " + guess + "? (y OR n) ");
+      if (response.toLowerCase() !== answer) {
+        range = await ask("Is it higher (h), or lower (l)? ");
+      }
+      if (response.toLowerCase() === answer) {
+        console.log("You Number was " + guess + "!");
+      }
+      //if user input = h
+    } else if (range.toLowerCase() === "h") {
       lowNum = guess + 1;
       guess = Math.round((highNum + lowNum) / 2);
-      response = await ask("Is it... " + guess + "? (Y OR N) ");
-      if (response !== answer) {
-      range = await ask("Is it higher (H), or lower (L)? ");
+      response = await ask("Is it... " + guess + "? (y OR n) ");
+      if (response.toLowerCase() !== answer) {
+        range = await ask("Is it higher (h), or lower (l)? ");
       }
-      if (response === answer) {
+      if (response.toLowerCase() === answer) {
         console.log("You Number was " + guess + "!");
       }
     }
