@@ -49,7 +49,12 @@ async function start() {
       lowNum = guess + 1;
       guess = Math.round((highNum + lowNum) / 2);
       response = await ask("Is it... " + guess + "? (Y OR N) ");
+      if (response !== answer) {
       range = await ask("Is it higher (H), or lower (L)? ");
+      }
+      if (response === answer) {
+        console.log("You Number was " + guess + "!");
+      }
     }
   }
   //game end
