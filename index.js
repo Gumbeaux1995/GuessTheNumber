@@ -36,7 +36,7 @@ function timeout(ms) {
 async function computerGuessing() {
   //starting dialogue
   console.log(
-    "Please think of a whole number (No decimals or fractions) between 1 and 100 (inclusive). I will try to guess it"
+    "Please think of a whole number (No decimals or fractions) between 1 and 100 (inclusive). I will try to guess it within 7 guesses!"
   );
   //low and high variables
   let lowNum = 1;
@@ -44,12 +44,13 @@ async function computerGuessing() {
   //computer guess equation
   let guess = Math.round((highNum + lowNum) / 2);
   //timeout to guess number
-  await timeout(5000);
+  await timeout(4000);
   //Computer guess dialogue with user input
   let response = await ask(
     "Is it... " + guess + "? Type (y) for yes, OR (n) for no "
   );
   let answer = "y";
+  
   //correct reponse dialogue when user response = y
   if (response.toLowerCase() === answer) {
     console.log("You Number was " + guess + "!");
@@ -64,17 +65,29 @@ async function computerGuessing() {
   }
   //higher or lower user input
   let range = await ask("Is it higher? Type (h). Or lower? Type (l)? ");
-  //while loop
-  //while user input does not = y
+  let count = 1;
+  //while loop when user input does not = y
   while (response.toLowerCase() !== answer) {
     //If use user input does not = h
-    if (range.toLowerCase() !== "h") {
+    if (count === 7 ) {
+      console.log("It took me more than 7 guesses! I give up! You win!")
+      let restartGame = await ask(
+        " Would you like to play again? Type (y) for yes, or Type (n) for no. "
+      );
+      if (restartGame.toLowerCase() === "y") {
+        start();
+      } else {
+        process.exit();
+      }
+    }
+    else if (range.toLowerCase() !== "h") {
       highNum = guess - 1;
       guess = Math.round((highNum + lowNum) / 2);
       response = await ask(
         "Is it... " + guess + "? Type (y) for yes, OR Type (n) for no "
       );
       if (response.toLowerCase() !== answer) {
+        count+=1;
         range = await ask("Is it higher? Type (h). Or lower? Type (l). ");
       }
       //did not use else because of .toLowercase method to reduce bad user input such as caps lock
@@ -89,6 +102,7 @@ async function computerGuessing() {
         "Is it... " + guess + "? Type (y) for yes, OR Type n for (no) "
       );
       if (response.toLowerCase() !== answer) {
+        count+=1;
         range = await ask("Is it higher? Type (h). Or lower? Type (l). ");
       }
       if (response.toLowerCase() === answer) {
@@ -96,10 +110,10 @@ async function computerGuessing() {
         let restartGame = await ask(
           " Would you like to play again? Type (y) for yes, or Type (n) for no. "
         );
-        if (restartGame.toLowerCase() === "n") {
-          process.exit();
-        } else {
+        if (restartGame.toLowerCase() === "y") {
           start();
+        } else {
+          process.exit();
         }
       }
     }
@@ -113,27 +127,32 @@ async function humanGuessing() {
   //user determines min and max numbers of range
   let max = await ask("What should the highest number possible be? ");
   let min = await ask("What should the lowest number possible be? ");
+
   //computer decides random number within range
   let secretNumber = Math.floor(Math.random() * (max - min + 1) + min);
+
+  let count = 1;
+
   //user guesses number
   let guess = await ask("Guess my number! ");
-  //computer shows user guess
-  console.log("GUESS: ", guess);
+
   //while loop
   while (secretNumber !== guess) {
     if (guess < secretNumber) {
+      count +=1;
       guess = await ask("Sorry too low. Guess higher. ");
     } else if (guess > secretNumber) {
+      count +=1;
       guess = await ask("Sorry too high. Guess lower. ");
     } else {
-      console.log("Congratulations! You guessed it!");
+      console.log("Congratulations! You guessed it! It took you " + count + " guesses" );
       let restartGame = await ask(
         " Would you like to play again? Type (y) for yes, or Type (n) for no. "
       );
-      if (restartGame.toLowerCase() === "n") {
-        process.exit();
-      } else {
+      if (restartGame.toLowerCase() === "y") {
         start();
+      } else {
+        process.exit();
       }
     }
   }
