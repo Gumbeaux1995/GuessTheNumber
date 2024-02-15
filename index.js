@@ -77,6 +77,7 @@ async function computerGuessing() {
       if (response.toLowerCase() !== answer) {
         range = await ask("Is it higher? Type (h). Or lower? Type (l). ");
       }
+      //did not use else because of .toLowercase method to reduce bad user input such as caps lock
       if (response.toLowerCase() === answer) {
         console.log("You Number was " + guess + "!");
       }
@@ -107,12 +108,15 @@ async function computerGuessing() {
 //start of human gueesing game
 async function humanGuessing() {
   console.log(
-    "Let's play a game where you I make up a number between 1-100 (inclusive) and you try to guess it."
+    "Let's play a game where you I make up a random number between a range you define (inclusive. No decimals or fractions.) and you try to guess it."
   );
-  //computer decides random number
-  let secretNumber = Math.floor(Math.random() * 100) + 1;
+  //user determines min and max numbers of range
+  let max = await ask("What should the highest number possible be? ");
+  let min = await ask("What should the lowest number possible be? ");
+  //computer decides random number within range
+  let secretNumber = Math.floor(Math.random() * (max - min + 1) + min);
   //user guesses number
-  let guess = await ask("Guess a number! ");
+  let guess = await ask("Guess my number! ");
   //computer shows user guess
   console.log("GUESS: ", guess);
   //while loop
